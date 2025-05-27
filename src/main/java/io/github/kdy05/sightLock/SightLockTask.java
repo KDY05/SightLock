@@ -44,11 +44,18 @@ public class SightLockTask {
         Location targetLoc = eye.add(offset);
         targetLoc.subtract(0, target.getHeight() / 2.0, 0); // 중심 보정
 
-        // 시선 방향 계산
+        // yaw 계산
         Vector toController = controller.getLocation().toVector().subtract(targetLoc.toVector()).normalize();
         float yaw = (float) Math.toDegrees(Math.atan2(-toController.getX(), toController.getZ()));
         targetLoc.setYaw(yaw);
-        targetLoc.setPitch(0);
+
+        // pitch 계산
+        Location targetEye = target.getEyeLocation();
+        Vector toCtrl = controller.getEyeLocation().toVector().subtract(targetEye.toVector()).normalize();
+        double dy = toCtrl.getY();
+        double dxz = Math.sqrt(toCtrl.getX() * toCtrl.getX() + toCtrl.getZ() * toCtrl.getZ());
+        float pitch = (float) Math.toDegrees(Math.atan2(-dy, dxz));
+        targetLoc.setPitch(pitch);
 
         return targetLoc;
     }

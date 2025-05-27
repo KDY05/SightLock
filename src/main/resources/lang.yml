@@ -14,5 +14,5 @@ error:
   unknown-command: "&cUnknown command. Please enter /sl help."
 
 sightlock:
-  locked: "&aThe target locked."
-  unlocked: "&The target unlocked."
+  locked: "&aTarget locked."
+  unlocked: "&cTarget unlocked."
