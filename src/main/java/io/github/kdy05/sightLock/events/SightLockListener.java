@@ -3,7 +3,6 @@ package io.github.kdy05.sightLock.events;
 import io.github.kdy05.sightLock.SightLockTask;
 import io.github.kdy05.sightLock.SightLock;
 import io.github.kdy05.sightLock.SightLockToggle;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -38,24 +37,24 @@ public class SightLockListener implements Listener {
         if (!(clicked instanceof LivingEntity target)) return;
 
         // 실행 조건
-        ItemStack item = controller.getInventory().getItemInMainHand();
         if (!SightLockToggle.isEnabled(controller.getUniqueId())) return;
-        if (item.getType() != Material.NETHERITE_HOE) return;
+        ItemStack item = controller.getInventory().getItemInMainHand();
+        if (item.getType() != plugin.getConfigManager().getTriggerItem()) return;
 
         // 이벤트 연속 실행 방지
-        UUID controllerId = controller.getUniqueId();
-        if (isDuplicateClick(controllerId)) return;
+        UUID id = controller.getUniqueId();
+        if (isDuplicateClick(id)) return;
 
-        if (activeLocks.containsKey(controllerId)) {
+        if (activeLocks.containsKey(id)) {
             // 고정 해제 로직
-            activeLocks.get(controllerId).cancel();
-            activeLocks.remove(controllerId);
+            activeLocks.get(id).cancel();
+            activeLocks.remove(id);
             controller.sendMessage(plugin.getConfigManager().getMessage("sightlock.unlocked"));
         } else {
             // 고정 시작 로직
-            SightLockTask holder = new SightLockTask(controller, target);
-            holder.start();
-            activeLocks.put(controllerId, holder);
+            SightLockTask lockTask = new SightLockTask(controller, target);
+            lockTask.start();
+            activeLocks.put(id, lockTask);
             controller.sendMessage(plugin.getConfigManager().getMessage("sightlock.locked"));
         }
     }
@@ -63,15 +62,22 @@ public class SightLockListener implements Listener {
     // 허공을 포함하여 무엇을 우클릭하든 고정을 해제할 수 있음
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        UUID id = player.getUniqueId();
-        if (isDuplicateClick(id)) return; // 이벤트 중복 실행 방지
+        Player controller = event.getPlayer();
+
+        // 실행 조건
+        if (!SightLockToggle.isEnabled(controller.getUniqueId())) return;
+        ItemStack item = controller.getInventory().getItemInMainHand();
+        if (item.getType() != plugin.getConfigManager().getTriggerItem()) return;
+
+        // 이벤트 중복 실행 방지
+        UUID id = controller.getUniqueId();
+        if (isDuplicateClick(id)) return;
 
         if (activeLocks.containsKey(id)) {
             // 고정 해제 로직
             activeLocks.get(id).cancel();
             activeLocks.remove(id);
-            player.sendMessage(plugin.getConfigManager().getMessage("sightlock.unlocked"));
+            controller.sendMessage(plugin.getConfigManager().getMessage("sightlock.unlocked"));
         }
     }
 
@@ -86,41 +92,24 @@ public class SightLockListener implements Listener {
     @EventHandler
     public void onPlayerDeath(EntityDeathEvent event) {
         UUID id = event.getEntity().getUniqueId();
-
-        // 컨트롤러가 사망하는 경우
-        if (activeLocks.containsKey(id)) {
-            activeLocks.get(id).cancel();
-            activeLocks.remove(id);
-        }
-
-        // 타겟이 사망하는 경우
-        for (Map.Entry<UUID, SightLockTask> entry : activeLocks.entrySet()) {
-            SightLockTask task = entry.getValue();
-            if (task.getTargetId().equals(id)) {
-                task.cancel();
-                activeLocks.remove(entry.getKey()); // controllerId 기준 제거
-                // 메시지 보내기
-                Player controller = plugin.getServer().getPlayer(entry.getKey());
-                if (controller != null && controller.isOnline()) {
-                    controller.sendMessage(plugin.getConfigManager().getMessage("sightlock.unlocked"));
-                }
-                break; // 1:1 대응이므로 바로 중단
-            }
-        }
+        deactiveLock(id);
     }
 
     // 퇴장 시 자동 해제
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         UUID id = event.getPlayer().getUniqueId();
+        deactiveLock(id);
+    }
 
-        // 컨트롤러가 퇴장하는 경우
+    private void deactiveLock(UUID id) {
+        // 컨트롤러가 관련된 경우
         if (activeLocks.containsKey(id)) {
             activeLocks.get(id).cancel();
             activeLocks.remove(id);
         }
 
-        // 타겟이 퇴장하는 경우
+        // 타겟이 관련된 경우
         for (Map.Entry<UUID, SightLockTask> entry : activeLocks.entrySet()) {
             SightLockTask task = entry.getValue();
             if (task.getTargetId().equals(id)) {

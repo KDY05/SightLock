@@ -1,18 +1,18 @@
 plugin:
-  enabled: "Plugin enabled successfully!"
-  disabled: "Plugin now disabled."
+  enabled: "플러그인이 성공적으로 활성화되었습니다!"
+  disabled: "플러그인이 비활성화되었습니다."
 
 command:
-  help: "&e/sl help: shows this message. \n/sl reload: reloads all the configs."
-  reloaded: "&aConfigs reloaded."
-  toggle-on: "&aSightLock is activated."
-  toggle-off: "&cSightLock is deactivated"
+  help: "&e/sl: 기능을 토글합니다.\n/sl help: 이 도움말을 표시합니다.\n/sl reload: 설정 파일을 다시 불러옵니다."
+  reloaded: "&a설정 파일을 다시 불러왔습니다."
+  toggle-on: "&a기능이 활성화되었습니다."
+  toggle-off: "&c기능이 비활성화되었습니다."
 
 error:
-  player-only: "&cThis command is for not console but player."
-  no-permission: "&cYou have no permission!"
-  unknown-command: "&cUnknown command. Please enter /sl help."
+  player-only: "&c이 명령어는 플레이어만 사용할 수 있습니다."
+  no-permission: "&c이 명령어를 사용할 권한이 없습니다!"
+  unknown-command: "&c알 수 없는 명령어입니다. /sl help를 입력해 주세요."
 
 sightlock:
-  locked: "&aTarget locked."
-  unlocked: "&cTarget unlocked."
+  locked: "&a대상을 시선에 고정했습니다."
+  unlocked: "&c대상의 고정을 해제했습니다."

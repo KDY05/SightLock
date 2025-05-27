@@ -1,6 +1,7 @@
 package io.github.kdy05.sightLock.config;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,7 +26,9 @@ public class ConfigManager {
 
         // Set up language file
         langFile = new File(plugin.getDataFolder(), "lang.yml");
-        plugin.saveResource("lang.yml", true);
+        if (!langFile.exists()) {
+            plugin.saveResource("lang.yml", false);
+        }
         langConfig = YamlConfiguration.loadConfiguration(langFile);
     }
 
@@ -54,6 +57,16 @@ public class ConfigManager {
     public String getMessage(String path) {
         String message = langConfig.getString(path, "Missing message: " + path);
         return ChatColor.translateAlternateColorCodes('&', message);
+    }
+
+    public Material getTriggerItem() {
+        String key = config.getString("tool-material", "NETHERITE_HOE").toUpperCase();
+        try {
+            return Material.valueOf(key);
+        } catch (IllegalArgumentException e) {
+            plugin.getLogger().warning("[SightLock] Invalid trigger item in config: " + key + ", defaulting to NETHERITE_HOE.");
+            return Material.NETHERITE_HOE;
+        }
     }
 
 }
