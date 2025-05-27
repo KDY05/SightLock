@@ -1,0 +1,12 @@
+plugin:
+  enabled: "Plugin enabled successfully!"
+  disabled: "Plugin now disabled."
+
+command:
+  help: "&e/sl help: shows this message. \n/sl reload: reloads all the configs."
+  reloaded: "&aConfigs reloaded."
+
+error:
+  player-only: "&cThis command is for not console but player."
+  no-permission: "&cYou have no permission!"
+  unknown-command: "&cUnknown command. Please enter /sl help."

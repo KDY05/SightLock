@@ -3,5 +3,14 @@ version: '1.0.0'
 main: io.github.kdy05.sightLock.SightLock
 api-version: '1.21'
 authors: [ Ararab ]
-description: 도움도움!
+description: Lock the entity in your sight!
 website: https://github.com/KDY05
+commands:
+  sightlock:
+    description: main command
+    aliases: [sl]
+    permission: sightlock.use
+permissions:
+  sightlock.use:
+    description: Allows using the base AdvancementPicker commands
+    default: op
