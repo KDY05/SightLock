@@ -14,13 +14,18 @@ public class SightLockTask {
 
     private final Player controller;
     private final LivingEntity target;
-    private final double initialDistance;
+    private double distance;
     private BukkitTask task;
 
     public SightLockTask(Player controller, LivingEntity target) {
         this.controller = controller;
         this.target = target;
-        this.initialDistance = controller.getLocation().distance(target.getLocation());
+        this.distance = controller.getLocation().distance(target.getLocation());
+    }
+
+    public void adjustDistance(int direction) {
+        distance += direction; // +1 or -1
+        distance = Math.max(1.0, Math.min(30, distance)); // 범위 제한
     }
 
     public void start() {
@@ -40,7 +45,7 @@ public class SightLockTask {
     private Location getTargetLoc() {
         // x, y, z 계산
         Location eye = controller.getEyeLocation();
-        Vector offset = eye.getDirection().normalize().multiply(initialDistance);
+        Vector offset = eye.getDirection().normalize().multiply(distance);
         Location targetLoc = eye.add(offset);
         targetLoc.subtract(0, target.getHeight() / 2.0, 0); // 중심 보정
 
