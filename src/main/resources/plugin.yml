@@ -1,0 +1,7 @@
+name: SightLock
+version: '1.0.0'
+main: io.github.kdy05.sightLock.SightLock
+api-version: '1.21'
+authors: [ Ararab ]
+description: 도움도움!
+website: https://github.com/KDY05
