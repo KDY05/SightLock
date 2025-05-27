@@ -25,9 +25,7 @@ public class ConfigManager {
 
         // Set up language file
         langFile = new File(plugin.getDataFolder(), "lang.yml");
-        if (!langFile.exists()) {
-            plugin.saveResource("lang.yml", false);
-        }
+        plugin.saveResource("lang.yml", true);
         langConfig = YamlConfiguration.loadConfiguration(langFile);
     }
 

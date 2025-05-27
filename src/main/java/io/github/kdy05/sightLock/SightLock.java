@@ -2,6 +2,7 @@ package io.github.kdy05.sightLock;
 
 import io.github.kdy05.sightLock.commands.SightLockCommand;
 import io.github.kdy05.sightLock.config.ConfigManager;
+import io.github.kdy05.sightLock.events.SightLockListener;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,6 +22,8 @@ public final class SightLock extends JavaPlugin {
 
         Objects.requireNonNull(getServer().getPluginCommand("sightlock"))
                 .setExecutor(new SightLockCommand(this));
+
+        getServer().getPluginManager().registerEvents(new SightLockListener(this), this);
 
         getLogger().info(configManager.getMessage("plugin.enabled"));
     }

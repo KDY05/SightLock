@@ -5,8 +5,14 @@ plugin:
 command:
   help: "&e/sl help: shows this message. \n/sl reload: reloads all the configs."
   reloaded: "&aConfigs reloaded."
+  toggle-on: "&aSightLock is activated."
+  toggle-off: "&cSightLock is deactivated"
 
 error:
   player-only: "&cThis command is for not console but player."
   no-permission: "&cYou have no permission!"
   unknown-command: "&cUnknown command. Please enter /sl help."
+
+sightlock:
+  locked: "&aThe target locked."
+  unlocked: "&The target unlocked."

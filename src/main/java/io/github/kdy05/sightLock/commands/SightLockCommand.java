@@ -1,10 +1,12 @@
 package io.github.kdy05.sightLock.commands;
 
 import io.github.kdy05.sightLock.SightLock;
+import io.github.kdy05.sightLock.SightLockToggle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,8 +29,19 @@ public class SightLockCommand implements CommandExecutor, TabCompleter {
         }
 
         if (strings.length == 0) {
-            showHelp(commandSender);
-            return false;
+            // 토글 처리
+            if (!(commandSender instanceof Player player)) {
+                commandSender.sendMessage(plugin.getConfigManager().getMessage("error.player-only"));
+                return false;
+            }
+
+            SightLockToggle.toggle(player.getUniqueId());
+
+            boolean nowEnabled = SightLockToggle.isEnabled(player.getUniqueId());
+            String msgKey = nowEnabled ? "command.toggle-on" : "command.toggle-off";
+            player.sendMessage(SightLock.PREFIX + plugin.getConfigManager().getMessage(msgKey));
+
+            return true;
         }
 
         String subCommand = strings[0].toLowerCase();
@@ -37,7 +50,7 @@ public class SightLockCommand implements CommandExecutor, TabCompleter {
             case "reload" -> handleReload(commandSender);
         }
 
-        return false;
+        return true;
     }
 
     private void showHelp(CommandSender sender) {
