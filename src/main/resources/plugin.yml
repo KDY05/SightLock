@@ -12,5 +12,5 @@ commands:
     permission: sightlock.use
 permissions:
   sightlock.use:
-    description: Allows using the base AdvancementPicker commands
+    description: Allows using the commands
     default: op
