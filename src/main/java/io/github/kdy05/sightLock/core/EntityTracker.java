@@ -14,7 +14,7 @@ public class EntityTracker {
     
     private static final double MIN_DISTANCE = 1.0;
     private static final double MAX_DISTANCE = 30.0;
-    private static final long TICK_INTERVAL = 2L;
+    private static final long TICK_INTERVAL = 1L;
     
     private final Player controller;
     private final LivingEntity target;
