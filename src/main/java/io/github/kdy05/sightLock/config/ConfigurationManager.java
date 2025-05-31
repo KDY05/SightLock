@@ -12,7 +12,6 @@ import java.util.logging.Level;
 
 public class ConfigurationManager {
     
-    private static final String CONFIG_FILE = "config.yml";
     private static final String LANG_FILE = "lang.yml";
     private static final String DEFAULT_TRIGGER_ITEM = "NETHERITE_HOE";
     private static final String TRIGGER_ITEM_KEY = "tool-material";
@@ -52,9 +51,8 @@ public class ConfigurationManager {
             plugin.reloadConfig();
             config = plugin.getConfig();
             languageConfig = YamlConfiguration.loadConfiguration(languageFile);
-            
-            plugin.getLogger().info("Configurations reloaded successfully");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             plugin.getLogger().log(Level.SEVERE, "Failed to reload configurations", e);
         }
     }
@@ -90,7 +88,4 @@ public class ConfigurationManager {
         }
     }
     
-    public boolean isValidConfiguration() {
-        return config != null && languageConfig != null;
-    }
 }

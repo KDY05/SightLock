@@ -33,10 +33,8 @@ public class SightLockCommandExecutor implements CommandExecutor, TabCompleter {
     }
     
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, 
-                           @NotNull Command command, 
-                           @NotNull String label, 
-                           @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
+                             @NotNull String label, @NotNull String[] args) {
         
         if (!sender.hasPermission(PERMISSION_USE)) {
             sender.sendMessage(configManager.getMessage("error.no-permission"));
@@ -53,7 +51,7 @@ public class SightLockCommandExecutor implements CommandExecutor, TabCompleter {
             case "help" -> handleHelpCommand(sender);
             case "reload" -> handleReloadCommand(sender);
             case "status" -> handleStatusCommand(sender);
-            default -> sender.sendMessage(configManager.getMessage("command.unknown"));
+            default -> sender.sendMessage(configManager.getMessage("error.unknown-command"));
         }
         
         return true;
@@ -77,6 +75,7 @@ public class SightLockCommandExecutor implements CommandExecutor, TabCompleter {
     
     private void handleHelpCommand(@NotNull CommandSender sender) {
         sender.sendMessage(configManager.getMessage("command.help"));
+        sender.sendMessage(configManager.getMessage("command.tool-spec"));
     }
     
     private void handleReloadCommand(@NotNull CommandSender sender) {
@@ -89,7 +88,7 @@ public class SightLockCommandExecutor implements CommandExecutor, TabCompleter {
             configManager.reloadConfigurations();
             sender.sendMessage(PREFIX + configManager.getMessage("command.reloaded"));
         } catch (Exception e) {
-            sender.sendMessage(PREFIX + ChatColor.RED + "Failed to reload configurations. Check console for details.");
+            sender.sendMessage(PREFIX + ChatColor.RED + configManager.getMessage("command.reload-failed"));
         }
     }
     
@@ -109,10 +108,8 @@ public class SightLockCommandExecutor implements CommandExecutor, TabCompleter {
     
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, 
-                                    @NotNull Command command, 
-                                    @NotNull String alias, 
-                                    @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
+                                    @NotNull String alias, @NotNull String[] args) {
         
         if (!sender.hasPermission(PERMISSION_USE)) {
             return new ArrayList<>();
@@ -131,4 +128,5 @@ public class SightLockCommandExecutor implements CommandExecutor, TabCompleter {
                 .filter(completion -> completion.toLowerCase().startsWith(input.toLowerCase()))
                 .toList();
     }
+
 }
