@@ -1,6 +1,6 @@
 name: SightLock
-version: '1.1.0'
-main: io.github.kdy05.sightLock.SightLock
+version: '1.1.1'
+main: io.github.kdy05.sightlock.SightLock
 api-version: '1.21'
 authors: [ Ararab ]
 description: Lock the entity in your sight!
@@ -12,5 +12,8 @@ commands:
     permission: sightlock.use
 permissions:
   sightlock.use:
-    description: Allows using the commands
+    description: Allows using the basic commands
+    default: op
+  sightlock.reload:
+    description: Allows reloading configurations
     default: op
