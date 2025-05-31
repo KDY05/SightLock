@@ -13,15 +13,14 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SightLockListener implements Listener {
 
     private final SightLock plugin;
-    private final Map<UUID, SightLockTask> activeLocks = new HashMap<>();
-    private final Map<UUID, Long> lastClickTime = new HashMap<>();
+    private final Map<UUID, SightLockTask> activeLocks = new ConcurrentHashMap<>();
+    private final Map<UUID, Long> lastClickTime = new ConcurrentHashMap<>();
 
     public SightLockListener(SightLock plugin) {
         this.plugin = plugin;
@@ -95,8 +94,14 @@ public class SightLockListener implements Listener {
 
     private boolean isDuplicateClick(UUID playerId) {
         long now = System.currentTimeMillis();
-        if (lastClickTime.containsKey(playerId) && now - lastClickTime.get(playerId) < 300) return true;
+        Long lastTime = lastClickTime.get(playerId);
+        if (lastTime != null && now - lastTime < 300) return true;
         lastClickTime.put(playerId, now);
+        
+        if (lastClickTime.size() > 1000) {
+            lastClickTime.entrySet().removeIf(entry -> now - entry.getValue() > 60000);
+        }
+        
         return false;
     }
 
@@ -108,18 +113,21 @@ public class SightLockListener implements Listener {
         }
 
         // 타겟이 관련된 경우
+        UUID controllerToRemove = null;
         for (Map.Entry<UUID, SightLockTask> entry : activeLocks.entrySet()) {
             SightLockTask task = entry.getValue();
             if (task.getTargetId().equals(id)) {
                 task.cancel();
-                activeLocks.remove(entry.getKey()); // controllerId 기준 제거
-                // 메시지 보내기
+                controllerToRemove = entry.getKey();
                 Player controller = plugin.getServer().getPlayer(entry.getKey());
                 if (controller != null && controller.isOnline()) {
                     controller.sendMessage(plugin.getConfigManager().getMessage("sightlock.unlocked"));
                 }
-                break; // 1:1 대응이므로 바로 중단
+                break;
             }
+        }
+        if (controllerToRemove != null) {
+            activeLocks.remove(controllerToRemove);
         }
     }
 

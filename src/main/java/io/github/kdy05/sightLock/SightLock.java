@@ -31,8 +31,6 @@ public final class SightLock extends JavaPlugin {
     @Override
     public void onDisable() {
         plugin = null;
-        configManager = null;
-
         getLogger().info(configManager.getMessage("plugin.disabled"));
     }
 

@@ -38,29 +38,33 @@ public class SightLockTask {
                 }
                 target.teleport(getTargetLoc());
             }
-        }.runTaskTimer(SightLock.getPlugin(), 0L, 1L);
+        }.runTaskTimer(SightLock.getPlugin(), 0L, 2L);
     }
 
     @NotNull
     private Location getTargetLoc() {
-        // x, y, z 계산
         Location eye = controller.getEyeLocation();
-        Vector offset = eye.getDirection().normalize().multiply(distance);
-        Location targetLoc = eye.add(offset);
-        targetLoc.subtract(0, target.getHeight() / 2.0, 0); // 중심 보정
+        Vector direction = eye.getDirection();
+        
+        Location targetLoc = eye.clone().add(direction.multiply(distance));
+        targetLoc.subtract(0, target.getHeight() / 2.0, 0);
 
-        // yaw 계산
-        Vector toController = controller.getLocation().toVector().subtract(targetLoc.toVector()).normalize();
-        float yaw = (float) Math.toDegrees(Math.atan2(-toController.getX(), toController.getZ()));
-        targetLoc.setYaw(yaw);
+        Vector toController = controller.getLocation().toVector().subtract(targetLoc.toVector());
+        if (toController.lengthSquared() > 0) {
+            toController.normalize();
+            float yaw = (float) Math.toDegrees(Math.atan2(-toController.getX(), toController.getZ()));
+            targetLoc.setYaw(yaw);
 
-        // pitch 계산
-        Location targetEye = target.getEyeLocation();
-        Vector toCtrl = controller.getEyeLocation().toVector().subtract(targetEye.toVector()).normalize();
-        double dy = toCtrl.getY();
-        double dxz = Math.sqrt(toCtrl.getX() * toCtrl.getX() + toCtrl.getZ() * toCtrl.getZ());
-        float pitch = (float) Math.toDegrees(Math.atan2(-dy, dxz));
-        targetLoc.setPitch(pitch);
+            Location targetEye = targetLoc.clone().add(0, target.getEyeHeight(), 0);
+            Vector toCtrl = controller.getEyeLocation().toVector().subtract(targetEye.toVector());
+            if (toCtrl.lengthSquared() > 0) {
+                toCtrl.normalize();
+                double dy = toCtrl.getY();
+                double dxz = Math.sqrt(toCtrl.getX() * toCtrl.getX() + toCtrl.getZ() * toCtrl.getZ());
+                float pitch = (float) Math.toDegrees(Math.atan2(-dy, dxz));
+                targetLoc.setPitch(pitch);
+            }
+        }
 
         return targetLoc;
     }
