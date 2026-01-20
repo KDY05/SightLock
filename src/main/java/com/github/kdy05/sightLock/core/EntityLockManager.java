@@ -1,4 +1,4 @@
-package io.github.kdy05.sightlock.core;
+package com.github.kdy05.sightLock.core;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

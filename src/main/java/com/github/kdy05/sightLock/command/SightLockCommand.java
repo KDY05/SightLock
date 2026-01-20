@@ -1,7 +1,7 @@
-package io.github.kdy05.sightlock.command;
+package com.github.kdy05.sightLock.command;
 
-import io.github.kdy05.sightlock.config.ConfigurationManager;
-import io.github.kdy05.sightlock.core.PlayerToggleService;
+import com.github.kdy05.sightLock.config.ConfigManager;
+import com.github.kdy05.sightLock.core.PlayerToggleService;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SightLockCommandExecutor implements CommandExecutor, TabCompleter {
+public class SightLockCommand implements CommandExecutor, TabCompleter {
     
     private static final String PERMISSION_USE = "sightlock.use";
     private static final String PERMISSION_RELOAD = "sightlock.reload";
@@ -24,10 +24,10 @@ public class SightLockCommandExecutor implements CommandExecutor, TabCompleter {
     private static final List<String> SUB_COMMANDS = Arrays.asList("help", "reload", "status");
     
     private final PlayerToggleService toggleService;
-    private final ConfigurationManager configManager;
+    private final ConfigManager configManager;
     
-    public SightLockCommandExecutor(@NotNull PlayerToggleService toggleService,
-                                  @NotNull ConfigurationManager configManager) {
+    public SightLockCommand(@NotNull PlayerToggleService toggleService,
+                            @NotNull ConfigManager configManager) {
         this.toggleService = toggleService;
         this.configManager = configManager;
     }
@@ -124,7 +124,7 @@ public class SightLockCommandExecutor implements CommandExecutor, TabCompleter {
     
     @NotNull
     private List<String> filterCompletions(@NotNull String input) {
-        return SightLockCommandExecutor.SUB_COMMANDS.stream()
+        return SightLockCommand.SUB_COMMANDS.stream()
                 .filter(completion -> completion.toLowerCase().startsWith(input.toLowerCase()))
                 .toList();
     }

@@ -1,9 +1,9 @@
-package io.github.kdy05.sightlock.listener;
+package com.github.kdy05.sightLock.listener;
 
-import io.github.kdy05.sightlock.config.ConfigurationManager;
-import io.github.kdy05.sightlock.core.EntityLockManager;
-import io.github.kdy05.sightlock.core.EntityTracker;
-import io.github.kdy05.sightlock.core.PlayerToggleService;
+import com.github.kdy05.sightLock.config.ConfigManager;
+import com.github.kdy05.sightLock.core.EntityLockManager;
+import com.github.kdy05.sightLock.core.EntityTracker;
+import com.github.kdy05.sightLock.core.PlayerToggleService;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class PlayerInteractionListener implements Listener {
+public class PlayerListener implements Listener {
     
     private static final long CLICK_COOLDOWN_MS = 300L;
     private static final long CLEANUP_INTERVAL_MS = 60000L;
@@ -27,12 +27,12 @@ public class PlayerInteractionListener implements Listener {
     
     private final EntityLockManager lockManager;
     private final PlayerToggleService toggleService;
-    private final ConfigurationManager configManager;
+    private final ConfigManager configManager;
     private final Map<UUID, Long> lastClickTimes = new ConcurrentHashMap<>();
     
-    public PlayerInteractionListener(@NotNull EntityLockManager lockManager,
-                                   @NotNull PlayerToggleService toggleService,
-                                   @NotNull ConfigurationManager configManager) {
+    public PlayerListener(@NotNull EntityLockManager lockManager,
+                          @NotNull PlayerToggleService toggleService,
+                          @NotNull ConfigManager configManager) {
         this.lockManager = lockManager;
         this.toggleService = toggleService;
         this.configManager = configManager;

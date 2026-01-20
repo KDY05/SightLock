@@ -1,4 +1,4 @@
-package io.github.kdy05.sightlock.config;
+package com.github.kdy05.sightLock.config;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.logging.Level;
 
-public class ConfigurationManager {
+public class ConfigManager {
     
     private static final String LANG_FILE = "lang.yml";
     private static final String DEFAULT_TRIGGER_ITEM = "NETHERITE_HOE";
@@ -21,7 +21,7 @@ public class ConfigurationManager {
     private FileConfiguration languageConfig;
     private File languageFile;
     
-    public ConfigurationManager(@NotNull JavaPlugin plugin) {
+    public ConfigManager(@NotNull JavaPlugin plugin) {
         this.plugin = plugin;
         initializeConfigurations();
     }

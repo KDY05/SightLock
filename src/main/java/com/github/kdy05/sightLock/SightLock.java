@@ -1,10 +1,10 @@
-package io.github.kdy05.sightlock;
+package com.github.kdy05.sightLock;
 
-import io.github.kdy05.sightlock.command.SightLockCommandExecutor;
-import io.github.kdy05.sightlock.config.ConfigurationManager;
-import io.github.kdy05.sightlock.core.EntityLockManager;
-import io.github.kdy05.sightlock.core.PlayerToggleService;
-import io.github.kdy05.sightlock.listener.PlayerInteractionListener;
+import com.github.kdy05.sightLock.command.SightLockCommand;
+import com.github.kdy05.sightLock.config.ConfigManager;
+import com.github.kdy05.sightLock.core.EntityLockManager;
+import com.github.kdy05.sightLock.core.PlayerToggleService;
+import com.github.kdy05.sightLock.listener.PlayerListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,11 +12,11 @@ import java.util.Objects;
 
 public final class SightLock extends JavaPlugin {
     
-    private ConfigurationManager configManager;
+    private ConfigManager configManager;
     private PlayerToggleService toggleService;
     private EntityLockManager lockManager;
-    private PlayerInteractionListener eventListener;
-    private SightLockCommandExecutor commandExecutor;
+    private PlayerListener eventListener;
+    private SightLockCommand commandExecutor;
     
     @Override
     public void onEnable() {
@@ -42,12 +42,12 @@ public final class SightLock extends JavaPlugin {
     }
     
     private void initializeServices() {
-        configManager = new ConfigurationManager(this);
+        configManager = new ConfigManager(this);
         toggleService = new PlayerToggleService();
         lockManager = new EntityLockManager(this);
         
-        eventListener = new PlayerInteractionListener(lockManager, toggleService, configManager);
-        commandExecutor = new SightLockCommandExecutor(toggleService, configManager);
+        eventListener = new PlayerListener(lockManager, toggleService, configManager);
+        commandExecutor = new SightLockCommand(toggleService, configManager);
     }
     
     private void registerCommands() {
@@ -73,7 +73,7 @@ public final class SightLock extends JavaPlugin {
     }
     
     @NotNull
-    public ConfigurationManager getConfigurationManager() {
+    public ConfigManager getConfigurationManager() {
         return configManager;
     }
     
