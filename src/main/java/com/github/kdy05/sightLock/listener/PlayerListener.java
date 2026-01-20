@@ -56,13 +56,10 @@ public class PlayerListener implements Listener {
     public void onPlayerSwapItem(@NotNull PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
         UUID playerId = player.getUniqueId();
-        
-        if (!isValidDistanceAdjustment(player, playerId)) {
+        if (!isValidDistanceAdjustment(player)) {
             return;
         }
-        
         int direction = player.isSneaking() ? -1 : 1;
-        
         if (lockManager.adjustDistance(playerId, direction)) {
             event.setCancelled(true);
         }
@@ -115,8 +112,8 @@ public class PlayerListener implements Listener {
         return !isDuplicateClick(playerId);
     }
     
-    private boolean isValidDistanceAdjustment(@NotNull Player player, @NotNull UUID playerId) {
-        if (!toggleService.isEnabled(playerId)) {
+    private boolean isValidDistanceAdjustment(@NotNull Player player) {
+        if (!toggleService.isEnabled(player.getUniqueId())) {
             return false;
         }
         
@@ -125,7 +122,7 @@ public class PlayerListener implements Listener {
             return false;
         }
         
-        return lockManager.hasLock(playerId);
+        return lockManager.hasLock(player.getUniqueId());
     }
     
     private void lockEntity(@NotNull Player player, @NotNull LivingEntity target) {

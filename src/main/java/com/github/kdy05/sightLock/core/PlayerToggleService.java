@@ -28,7 +28,4 @@ public class PlayerToggleService {
         enabledPlayers.clear();
     }
     
-    public int getEnabledPlayerCount() {
-        return enabledPlayers.size();
-    }
 }

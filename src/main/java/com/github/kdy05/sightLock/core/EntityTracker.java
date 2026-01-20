@@ -116,11 +116,7 @@ public class EntityTracker {
     public UUID getControllerId() {
         return controller.getUniqueId();
     }
-    
-    public double getDistance() {
-        return distance;
-    }
-    
+
     public boolean isActive() {
         return task != null && !task.isCancelled();
     }

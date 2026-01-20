@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public final class SightLock extends JavaPlugin {
-    
     private ConfigManager configManager;
     private PlayerToggleService toggleService;
     private EntityLockManager lockManager;
@@ -24,10 +23,10 @@ public final class SightLock extends JavaPlugin {
             initializeServices();
             registerCommands();
             registerEvents();
-            getLogger().info(configManager.getMessage("plugin.enabled"));
+            getLogger().info("Enabling plugin completed.");
         }
         catch (Exception e) {
-            getLogger().severe(configManager.getMessage("plugin.enabled-failed") + e.getMessage());
+            getLogger().severe("Enabling plugin failed: " + e.getMessage());
             getServer().getPluginManager().disablePlugin(this);
         }
     }
@@ -35,10 +34,7 @@ public final class SightLock extends JavaPlugin {
     @Override
     public void onDisable() {
         cleanupResources();
-        
-        if (configManager != null) {
-            getLogger().info(configManager.getMessage("plugin.disabled"));
-        }
+        getLogger().info("Disabling plugin completed.");
     }
     
     private void initializeServices() {
@@ -53,7 +49,6 @@ public final class SightLock extends JavaPlugin {
     private void registerCommands() {
         Objects.requireNonNull(getCommand("sightlock"))
                 .setExecutor(commandExecutor);
-        
         Objects.requireNonNull(getCommand("sightlock"))
                 .setTabCompleter(commandExecutor);
     }
@@ -66,24 +61,24 @@ public final class SightLock extends JavaPlugin {
         if (lockManager != null) {
             lockManager.removeAllLocks();
         }
-        
         if (toggleService != null) {
             toggleService.disableAll();
         }
     }
-    
-    @NotNull
-    public ConfigManager getConfigurationManager() {
+
+    @SuppressWarnings("unused")
+    @NotNull public ConfigManager getConfigurationManager() {
         return configManager;
     }
-    
-    @NotNull
-    public PlayerToggleService getToggleService() {
+
+    @SuppressWarnings("unused")
+    @NotNull public PlayerToggleService getToggleService() {
         return toggleService;
     }
-    
-    @NotNull
-    public EntityLockManager getLockManager() {
+
+    @SuppressWarnings("unused")
+    @NotNull public EntityLockManager getLockManager() {
         return lockManager;
     }
+
 }

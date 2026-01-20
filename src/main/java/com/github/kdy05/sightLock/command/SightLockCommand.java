@@ -2,7 +2,9 @@ package com.github.kdy05.sightLock.command;
 
 import com.github.kdy05.sightLock.config.ConfigManager;
 import com.github.kdy05.sightLock.core.PlayerToggleService;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,11 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SightLockCommand implements CommandExecutor, TabCompleter {
-    
     private static final String PERMISSION_USE = "sightlock.use";
     private static final String PERMISSION_RELOAD = "sightlock.reload";
-    private static final String PREFIX = ChatColor.GOLD + "[SightLock] " + ChatColor.WHITE;
-    
     private static final List<String> SUB_COMMANDS = Arrays.asList("help", "reload", "status");
     
     private final PlayerToggleService toggleService;
@@ -68,8 +67,7 @@ public class SightLockCommand implements CommandExecutor, TabCompleter {
         boolean isEnabled = toggleService.isEnabled(player.getUniqueId());
         String messageKey = isEnabled ? "command.toggle-on" : "command.toggle-off";
         
-        player.sendMessage(PREFIX + configManager.getMessage(messageKey));
-        
+        player.sendMessage(configManager.getMessage(messageKey));
         return true;
     }
     
@@ -83,12 +81,11 @@ public class SightLockCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(configManager.getMessage("error.no-permission"));
             return;
         }
-        
         try {
             configManager.reloadConfigurations();
-            sender.sendMessage(PREFIX + configManager.getMessage("command.reloaded"));
+            sender.sendMessage(configManager.getMessage("command.reloaded"));
         } catch (Exception e) {
-            sender.sendMessage(PREFIX + ChatColor.RED + configManager.getMessage("command.reload-failed"));
+            sender.sendMessage(configManager.getMessage("command.reload-failed"));
         }
     }
     
@@ -97,13 +94,14 @@ public class SightLockCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(configManager.getMessage("error.player-only"));
             return;
         }
-        
+
         boolean isEnabled = toggleService.isEnabled(player.getUniqueId());
-        String status = isEnabled ? ChatColor.GREEN + "ENABLED" : ChatColor.RED + "DISABLED";
-        
-        player.sendMessage(PREFIX + "Status: " + status);
-        player.sendMessage(PREFIX + "Trigger Item: " + ChatColor.YELLOW + 
-                          configManager.getTriggerItem().name());
+        String status = isEnabled ? "<green>ENABLED" : "<yellow>DISABLED";
+
+        player.sendMessage(Component.text("----------------", NamedTextColor.DARK_GRAY));
+        player.sendMessage(MiniMessage.miniMessage().deserialize("Status: " + status));
+        player.sendMessage(MiniMessage.miniMessage().deserialize("Tool Material: <gray>"
+                + configManager.getTriggerItem().name()));
     }
     
     @Nullable

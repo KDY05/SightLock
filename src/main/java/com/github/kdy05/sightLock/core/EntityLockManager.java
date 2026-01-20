@@ -66,11 +66,7 @@ public class EntityLockManager {
         activeTrackers.values().forEach(EntityTracker::stopTracking);
         activeTrackers.clear();
     }
-    
-    public int getActiveLockCount() {
-        return activeTrackers.size();
-    }
-    
+
     public boolean adjustDistance(@NotNull UUID controllerId, int direction) {
         EntityTracker tracker = activeTrackers.get(controllerId);
         if (tracker != null) {
