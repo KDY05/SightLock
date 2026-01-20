@@ -80,6 +80,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
         UUID playerId = event.getPlayer().getUniqueId();
+        lockManager.removeTargetLock(playerId);
         lockManager.removeLock(playerId);
         toggleService.disable(playerId);
         cleanupPlayerData(playerId);

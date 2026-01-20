@@ -15,9 +15,9 @@ command:
 
 error:
   player-only: "<red>이 명령어는 플레이어만 사용할 수 있습니다."
-  no-permission: "<red>이 명령어를 사용할 권한이 없습니다!"
+  no-permission: "<red>이 명령어를 사용할 권한이 없습니다."
   unknown-command: "<red>알 수 없는 명령어입니다. /sl help를 입력해 주세요."
 
 sightlock:
-  locked: "<green>대상을 고정했습니다."
-  unlocked: "<yellow>대상의 고정을 해제했습니다."
+  locked: "<prefix><green>대상을 고정했습니다."
+  unlocked: "<prefix><yellow>대상의 고정을 해제했습니다."

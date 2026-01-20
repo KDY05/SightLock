@@ -26,6 +26,11 @@ public class EntityLockManager {
             return null;
         }
         
+        if (target instanceof Player targetPlayer) {
+            targetPlayer.setAllowFlight(true);
+            targetPlayer.setFlying(true);
+        }
+
         EntityTracker tracker = new EntityTracker(controller, target);
         tracker.startTracking(plugin);
         activeTrackers.put(controllerId, tracker);
@@ -42,20 +47,14 @@ public class EntityLockManager {
         return false;
     }
     
-    public boolean removeTargetLock(@NotNull UUID targetId) {
+    public void removeTargetLock(@NotNull UUID targetId) {
         for (Map.Entry<UUID, EntityTracker> entry : activeTrackers.entrySet()) {
             if (entry.getValue().getTargetId().equals(targetId)) {
                 EntityTracker tracker = activeTrackers.remove(entry.getKey());
                 tracker.stopTracking();
-                return true;
+                return;
             }
         }
-        return false;
-    }
-    
-    @Nullable
-    public EntityTracker getLock(@NotNull UUID controllerId) {
-        return activeTrackers.get(controllerId);
     }
     
     public boolean hasLock(@NotNull UUID controllerId) {

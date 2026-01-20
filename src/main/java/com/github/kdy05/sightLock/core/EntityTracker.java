@@ -60,6 +60,13 @@ public class EntityTracker {
             task.cancel();
             task = null;
         }
+
+        if (target instanceof Player targetPlayer) {
+            targetPlayer.setFlying(false);
+            if (targetPlayer.getGameMode() != org.bukkit.GameMode.CREATIVE) {
+                targetPlayer.setAllowFlight(false);
+            }
+        }
     }
     
     private boolean isValidState() {
